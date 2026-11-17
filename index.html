@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>緯育TibaMe自主學習訂閱方案課程清單</title>
-    <style
->
+    <style>
         :root {
             --primary-color: #0056b3;
             --bg-color: #f8f9fa;
@@ -30,8 +29,8 @@
             margin-bottom: 30px;
         }
         .filter-bar {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 15px;
             margin-bottom: 25px;
             background: #ffffff;
@@ -40,17 +39,15 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
         .filter-group {
-            flex: 1;
-            min-width: 200px;
+            display: flex;
+            flex-direction: column;
         }
         .filter-group label {
-            display: block;
             margin-bottom: 5px;
             font-weight: bold;
             font-size: 14px;
         }
         .filter-group select, .filter-group input {
-            width: 100%;
             padding: 8px 12px;
             border: 1px solid var(--border-color);
             border-radius: 4px;
@@ -77,19 +74,19 @@
         }
         .course-meta {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             margin-bottom: 10px;
             flex-wrap: wrap;
         }
         .badge {
-            font-size: 12px;
-            padding: 3px 8px;
+            font-size: 11px;
+            padding: 3px 6px;
             border-radius: 4px;
             background-color: #e9ecef;
             color: #495057;
         }
-        .badge-domain { background-color: #d1ecf1; color: #0c5460; }
-        .badge-type { background-color: #d4edda; color: #155724; }
+        .badge-sub { background-color: #d1ecf1; color: #0c5460; }
+        .badge-level { background-color: #d4edda; color: #155724; }
         .course-title {
             font-size: 18px;
             font-weight: bold;
@@ -149,21 +146,42 @@
             <input type="text" id="searchKey" placeholder="輸入課程名稱或講師..." onkeyup="filterCourses()">
         </div>
         <div class="filter-group">
-            <label for="filterDomain">領域篩選</label>
-            <select id="filterDomain" onchange="filterCourses()">
+            <label for="filterSubDomain">領域篩選</label>
+            <select id="filterSubDomain" onchange="filterCourses()">
                 <option value="">全部領域</option>
-                <option value="職場">職場</option>
-                <option value="科技">科技</option>
-                <option value="語文">語文</option>
+                <option value="人工智慧">人工智慧</option>
+                <option value="個人成長">個人成長</option>
+                <option value="商用外語">商用外語</option>
+                <option value="組織發展">組織發展</option
+>
+                <option value="軟體開發">軟體開發</option>
+                <option value="雲端技術">雲端技術</option>
+                <option value="資訊安全">資訊安全</option>
+                <option value="數位內容">數位內容</option>
+                <option value="數位商務">數位商務</option>
             </select>
         </div>
         <div class="filter-group">
-            <label for="filterLevel">管理層級 (L1)</label>
-            <select id="filterLevel" onchange="filterCourses()">
-                <option value="">全部層級</option>
+            <label for="filterL1">L1 篩選</label>
+            <select id="filterL1" onchange="filterCourses()">
+                <option value="">全部 L1</option>
                 <option value="D1-共通">D1-共通</option>
                 <option value="D2-專業">D2-專業</option>
                 <option value="D3-管理">D3-管理</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="filterL2">L2 篩選</label>
+            <select id="filterL2" onchange="filterCourses()">
+                <option value="">全部 L2</option>
+                <!-- 可依實際資料擴充 L2 選項 -->
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="filterL3">L3 篩選</label>
+            <select id="filterL3" onchange="filterCourses()">
+                <option value="">全部 L3</option>
+                <!-- 可依實際資料擴充 L3 選項 -->
             </select>
         </div>
     </div>
@@ -175,27 +193,11 @@
 
 <script>
     const courses = [
-        { code: "MISC11.AZ2609.001", domain: "職場", subDomain: "人工智慧", l1: "D1-共通", name: "知識管理的 AI 轉型：打造「即問即答」的數位大腦", instructor: "吳奇珅", hours: "1", type: "線上課程", url: "https://www.tibame.com/course/6564" },
-        { code: "MISC11.AZ2608.011", domain: "職場", subDomain: "個人成長", l1: "D2-專業", name: "從進店到成交：門市銷售溝通與成交引導實戰", instructor: "Lulu CHEN", hours: "0.9", type: "線上課程", url: "https://www.tibame.com/course/6626" },
-        { code: "MISC11.AZ2608.007", domain: "職場", subDomain: "組織發展", l1: "D3-管理", name: "主管必修：職場霸凌風險下的管理與溝通技巧", instructor: "考特老師(Scott)", hours: "0.5", type: "線上課程", url: "https://www.tibame.com/course/6660" },
-        { code: "MISC11.AZ2608.010", domain: "科技", subDomain: "資訊安全", l1: "D3-管理", name: "管制 AI 到管理 AI：企業安全使用 AI 的新思維", instructor: "Jerry Chen", hours: "1", type: "線上課程", url: "https://www.tibame.com/course/6593" },
-        { code: "MISC11.AZ2608.008", domain: "職場", subDomain: "組織發展", l1: "D1-共通", name: "好好說話的力量：打造安心職場的溝通術", instructor: "楊致中", hours: "0.5", type: "線上課程", url: "https://www.tibame.com/course/6661" },
-        { code: "MISC11.AZ2608.005", domain: "職場", subDomain: "組織發展", l1: "D3-管理", name: "職場霸凌法一點通：企業的管理責任與風險界線", instructor: "勝綸法律事務所", hours: "0.8", type: "線上課程", url: "https://www.tibame.com/course/6618" },
-        { code: "MISC11.AZ2608.006", domain: "職場", subDomain: "組織發展", l1: "D3-管理", name: "防治職場霸凌的企業推動策略", instructor: "CJ Kuo", hours: "0.8", type: "線上課程", url: "https://www.tibame.com/course/6665" },
-        { code: "MISC11.AZ2608.004", domain: "職場", subDomain: "組織發展", l1: "D3-管理", name: "看懂數據、看懂客人：服務業店長的門市判讀課", instructor: "Andy老師", hours: "1", type: "線上課程", url: "https://www.tibame.com/course/6615" },
-        { code: "MISC11.AZ2608.001", domain: "職場", subDomain: "組織發展", l1: "D1-共通", name: "職場霸凌員工篇：樣態辨識與權益責任須知", instructor: "勝綸法律事務所", hours: "1", type: "線上課程", url: "https://www.tibame.com/course/6634" },
-        { code: "MISC11.AZ2608.002", domain: "職場", subDomain: "組織發展", l1: "D3-管理", name: "職場霸凌主管篇：掌握管理界線與溝通原則", instructor: "勝綸法律事務所", hours: "1", type: "線上課程", url: "https://www.tibame.com/course/6635" },
-        { code: "MISC11.AZ2608.003", domain: "職場", subDomain: "組織發展", l1: "D2-專業", name: "職場霸凌專責篇：申訴調查與申復執行實務", instructor: "勝綸法律事務所", hours: "1", type: "線上課程", url: "https://www.tibame.com/course/6636" },
-        { code: "MISC11.AZ2605.002", domain: "職場", subDomain: "組織發展", l1: "D3-管理", name: "AI時代關鍵人才養成計畫：打造高效自驅團隊", instructor: "彭智彬 / Ben老師", hours: "0.9", type: "線上課程", url: "https://www.tibame.com/course/6613" },
-        { code: "MISC11.AZ2605.005", domain: "職場", subDomain: "個人成長", l1: "D1-共通", name: "百用百科3-AI 業務高價值客戶識別｜鎖定精準名單提升成交率", instructor: "Jimmy-吉米", hours: "1.4", type: "線上課程", url: "https://www.tibame.com/course/6520" },
-        { code: "MISC11.AZ2605.006", domain: "科技", subDomain: "人工智慧", l1: "D1-共通", name: "百用百科3-AI 零售營收洞察｜從銷售數據挖掘高獲利成長策略", instructor: "Jimmy-吉米", hours: "1", type: "線上課程", url: "https://www.tibame.com/course/6521" },
-        { code: "MISC11.AZ2605.010", domain: "科技", subDomain: "數位商務", l1: "D1-共通", name: "百用百科3-AI 廣告數據分析實戰｜打造成效到決策的跨平台儀表板", instructor: "何佳勳", hours: "1.3", type: "線上課程", url: "https://www.tibame.com/course/6522" },
-        { code: "MISC11.AZ2605.011", domain: "科技", subDomain: "數位商務", l1: "D1-共通", name: "百用百科3-AI 廣告預算操盤術｜ 打造高轉換決策系統", instructor: "何佳勳", hours: "1.1", type: "線上課程", url: "https://www.tibame.com/course/6545" },
-        { code: "MISC11.AZ2605.012", domain: "科技", subDomain: "人工智慧", l1: "D1-共通", name: "百用百科3-AI 打造營運儀表板 l 解讀財務數據與成果分析", instructor: "王恩琦 (Angi Wang)", hours: "1", type: "線上課程", url: "https://www.tibame.com/course/6546" },
-        { code: "MISC11.AZ2605.008", domain: "職場", subDomain: "個人成長", l1: "D1-共通", name: "百用百科3-AI 營運數據判讀｜精準溝通推動決策落地", instructor: "劉恭甫 / 功夫老師", hours: "1.7", type: "線上課程", url: "https://www.tibame.com/course/6547" },
-        { code: "MISC11.AZ2605.007", domain: "職場", subDomain: "組織發展", l1: "D1-共通", name: "百用百科3-AI 業績問題拆解｜制定 30 天成長行動方案", instructor: "劉恭甫 / 功夫老師", hours: "1.5", type: "線上課程", url: "https://www.tibame.com/course/6548" },
-        { code: "MISC11.AZ2605.009", domain: "科技", subDomain: "人工智慧", l1: "D1-共通", name: "百用百科3-AI 客服洞察決策｜從用戶回饋加速產品與服務優化", instructor: "酒Ann", hours: "1.3", type: "線上課程", url: "https://www.tibame.com/course/6549" }
-        // 註：資料量龐大，此處已載入前段代表性課程。若需載入完整清單，可直接將所有資料擴充至此陣列中。
+        { code: "MISC11.AZ2609.001", subDomain: "人工智慧", l1: "D1-共通", l2: "範例L2", l3: "範例L3", name: "知識管理的 AI 轉型：打造「即問即答」的數位大腦", instructor: "吳奇珅", hours: "1", url: "https://www.tibame.com/course/6564" },
+        { code: "MISC11.AZ2608.011", subDomain: "個人成長", l1: "D2-專業", l2: "範例L2", l3: "範例L3", name: "從進店到成交：門市銷售溝通與成交引導實戰", instructor: "Lulu CHEN", hours: "0.9", url: "https://www.tibame.com/course/6626" },
+        { code: "MISC11.AZ2608.007", subDomain: "組織發展", l1: "D3-管理", l2: "範例L2", l3: "範例L3", name: "主管必修：職場霸凌風險下的管理與溝通技巧", instructor: "考特老師(Scott)", hours: "0.5", url: "https://www.tibame.com/course/6660" },
+        { code: "MISC11.AZ2608.010", subDomain: "資訊安全", l1: "D3-管理", l2: "範例L2", l3: "範例L3", name: "管制 AI 到管理 AI：企業安全使用 AI 的新思維", instructor: "Jerry Chen", hours: "1", url: "https://www.tibame.com/course/6593" },
+        { code: "MISC11.AZ2605.010", subDomain: "數位商務", l1: "D1-共通", l2: "範例L2", l3: "範例L3", name: "百用百科3-AI 廣告數據分析實戰｜打造成效到決策的跨平台儀表板", instructor: "何佳勳", hours: "1.3", url: "https://www.tibame.com/course/6522" }
     ];
 
     function renderCourses(data) {
@@ -213,9 +215,10 @@
             card.innerHTML = `
                 <div>
                     <div class="course-meta">
-                        <span class="badge badge-domain">${item.domain}</span>
-                        <span class="badge">${item.subDomain}</span>
-                        <span class="badge badge-type">${item.l1}</span>
+                        <span class="badge badge-sub">${item.subDomain}</span>
+                        <span class="badge badge-level">${item.l1}</span>
+                        <span class="badge">${item.l2}</span>
+                        <span class="badge">${item.l3}</span>
                     </div>
                     <h3 class="course-title">${item.name}</h3>
                     <div class="course-details">
@@ -234,20 +237,23 @@
 
     function filterCourses() {
         const searchKey = document.getElementById('searchKey').value.toLowerCase();
-        const filterDomain = document.getElementById('filterDomain').value;
-        const filterLevel = document.getElementById('filterLevel').value;
+        const filterSubDomain = document.getElementById('filterSubDomain').value;
+        const filterL1 = document.getElementById('filterL1').value;
+        const filterL2 = document.getElementById('filterL2').value;
+        const filterL3 = document.getElementById('filterL3').value;
 
         const filtered = courses.filter(item => {
             const matchKey = item.name.toLowerCase().includes(searchKey) || item.instructor.toLowerCase().includes(searchKey);
-            const matchDomain = filterDomain === "" || item.domain === filterDomain;
-            const matchLevel = filterLevel === "" || item.l1 === filterLevel;
-            return matchKey && matchDomain && matchLevel;
+            const matchSubDomain = filterSubDomain === "" || item.subDomain === filterSubDomain;
+            const matchL1 = filterL1 === "" || item.l1 === filterL1;
+            const matchL2 = filterL2 === "" || item.l2 === filterL2;
+            const matchL3 = filterL3 === "" || item.l3 === filterL3;
+            return matchKey && matchSubDomain && matchL1 && matchL2 && matchL3;
         });
 
         renderCourses(filtered);
     }
 
-    // 初始化渲染全部課程
     renderCourses(courses);
 </script>
 
